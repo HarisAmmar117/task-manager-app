@@ -11,6 +11,25 @@ public class TaskService {
     private final TaskRepository taskRepository;
 
     public boolean createTask(TaskRequest taskRequest) {
+       
+        if (taskRequest.getTitle() == null || taskRequest.getTitle().trim().isEmpty()) {
+            return false;
+        }
+        
+        if (taskRequest.getTitle().length() < 3 || taskRequest.getTitle().length() > 100) {
+            return false;
+        }
+
+      
+        if (taskRequest.getStatus() == null || taskRequest.getStatus().trim().isEmpty()) {
+            return false;
+        }
+
+
+        if (taskRequest.getDescription() != null && taskRequest.getDescription().length() > 500) {
+            return false;
+        }
+
         try {
             Task task = new Task();
             updateTaskFromRequest(task, taskRequest);
