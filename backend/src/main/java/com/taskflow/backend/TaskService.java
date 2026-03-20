@@ -1,6 +1,7 @@
 package com.taskflow.backend;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -66,6 +67,48 @@ public class TaskService {
     }
 
 
+    //update a task by id
+    public boolean updateTask(Long id, TaskRequest taskRequest) {
+        
+        if (taskRequest.getTitle() == null || taskRequest.getTitle().trim().isEmpty()) {
+            return false;
+        }
+        
+        if (taskRequest.getTitle().length() < 3 || taskRequest.getTitle().length() > 100) {
+            return false;
+        }
+
+        if (taskRequest.getStatus() == null || taskRequest.getStatus().trim().isEmpty()) {
+            return false;
+        }
+
+        if (taskRequest.getDescription() != null && taskRequest.getDescription().length() > 500) {
+            return false;
+        }
+
+        try {
+           
+            Optional<Task> taskOptional = taskRepository.findById(id);
+            
+            if (taskOptional.isEmpty()) {
+                return false; 
+            }
+            
+            Task task = taskOptional.get();
+            
+      
+            updateTaskFromRequest(task, taskRequest);
+            
+            
+            taskRepository.save(task);
+            return true;
+            
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
     //converting task request to task
     public void updateTaskFromRequest(Task task, TaskRequest request){
 
@@ -90,6 +133,11 @@ public class TaskService {
         return taskResponse;
 
     }
+
+
+
+
+
 
 
 
