@@ -26,6 +26,7 @@ public class TaskController {
     TaskService taskService;
 
 
+    //creating new task
     @PostMapping
     public ResponseEntity<String> addTask(@RequestBody TaskRequest taskRequest) {
         
@@ -41,6 +42,7 @@ public class TaskController {
     }
 
 
+    //get all task
     @GetMapping
     public ResponseEntity<List<TaskResponse>> getAllTasks() {
 
@@ -49,6 +51,7 @@ public class TaskController {
     }
 
 
+    //get a task by id
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponse> getTask(@PathVariable Long id){
 

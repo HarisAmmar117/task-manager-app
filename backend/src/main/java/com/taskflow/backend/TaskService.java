@@ -13,6 +13,8 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
 
+
+    //creating new task
     public boolean createTask(TaskRequest taskRequest) {
        
         if (taskRequest.getTitle() == null || taskRequest.getTitle().trim().isEmpty()) {
@@ -44,6 +46,9 @@ public class TaskService {
     }
 
 
+
+
+    //get all task
     public List<TaskResponse> fetchAllTasks() {
        
         return taskRepository.findAll().stream()
@@ -52,6 +57,7 @@ public class TaskService {
     }
 
 
+    //get a task by id
     public TaskResponse fetchTask(Long id) {
         
         return taskRepository.findById(id)
@@ -60,6 +66,7 @@ public class TaskService {
     }
 
 
+    //converting task request to task
     public void updateTaskFromRequest(Task task, TaskRequest request){
 
         task.setTitle(request.getTitle());
@@ -70,6 +77,7 @@ public class TaskService {
     }
 
 
+    //converting task to task response
     public TaskResponse mapTasktoTaskResponse(Task task){
 
         TaskResponse taskResponse = new TaskResponse();
