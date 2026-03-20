@@ -52,6 +52,14 @@ public class TaskService {
     }
 
 
+    public TaskResponse fetchTask(Long id) {
+        
+        return taskRepository.findById(id)
+                    .map(this::mapTasktoTaskResponse)
+                    .orElse(null);
+    }
+
+
     public void updateTaskFromRequest(Task task, TaskRequest request){
 
         task.setTitle(request.getTitle());
@@ -74,6 +82,9 @@ public class TaskService {
         return taskResponse;
 
     }
+
+
+
 
 
  
