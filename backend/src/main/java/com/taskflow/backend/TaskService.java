@@ -1,5 +1,8 @@
 package com.taskflow.backend;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -41,6 +44,14 @@ public class TaskService {
     }
 
 
+    public List<TaskResponse> fetchAllTasks() {
+       
+        return taskRepository.findAll().stream()
+            .map(this::mapTasktoTaskResponse)
+            .collect(Collectors.toList());
+    }
+
+
     public void updateTaskFromRequest(Task task, TaskRequest request){
 
         task.setTitle(request.getTitle());
@@ -49,5 +60,22 @@ public class TaskService {
 
 
     }
+
+
+    public TaskResponse mapTasktoTaskResponse(Task task){
+
+        TaskResponse taskResponse = new TaskResponse();
+        taskResponse.setId(String.valueOf(task.getId()));
+        taskResponse.setTitle(task.getTitle());
+        taskResponse.setDescription(task.getDescription());
+        taskResponse.setStatus(task.getStatus());
+        taskResponse.setCreatedAt(task.getCreatedAt());
+
+        return taskResponse;
+
+    }
+
+
+ 
     
 }
