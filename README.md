@@ -6,17 +6,17 @@ A full-stack Task Manager application built with Angular (frontend), Spring Boot
 ## Features
 - ✅ Create, read, update, and delete tasks
 - ✅ Task filtering by status (TO_DO, IN_PROGRESS, DONE)
-- ✅ Responsive UI with Angular Material/Bootstrap
+- ✅ Responsive UI with Tailwind CSS
 - ✅ Form validation
 - ✅ RESTful API architecture
-- ✅ 3 - Tier Monolati architecture
+- ✅ 3-Tier Monolithic architecture
 
 ## Tech Stack
 
 ### Frontend
 - Angular
 - TypeScript
-- Angular Material / Bootstrap
+- Tailwind CSS
 - RxJS
 - HttpClient
 - Reactive Forms
@@ -24,17 +24,17 @@ A full-stack Task Manager application built with Angular (frontend), Spring Boot
 ### Backend
 - Spring Boot
 - Spring Data JPA
-- Maven
+- Maven/Gradle
 - RESTful API
 
 ### Database
 - MySQL
 
 ## Prerequisites
-- Node.js v24.14.0
+- Node.js v20.14.0 or higher
 - Java 21
 - Maven
-- MySQL Server
+- MySQL Server 8.0+
 
 ## Setup Instructions
 
@@ -51,7 +51,7 @@ Download and install MySQL from [https://dev.mysql.com/downloads/](https://dev.m
 
 #### Create Database
 ```sql
-CREATE DATABASE taskflowdb;
+CREATE DATABASE taskmanager;
 ```
 
 #### Database Configuration
@@ -67,26 +67,32 @@ cd backend
 #### Update Database Credentials
 Edit `src/main/resources/application.yaml`:
 
-```properties
-spring.application.name=taskmanager
+```yaml
+spring:
+  application:
+    name: "backend"
+  
+  datasource:
+    url: jdbc:mysql://localhost:3306/taskflowdb
+    username: root
+    password: yourpassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  jpa:
+    database: MYSQL
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
 
-# Database Configuration
-spring.datasource.url=jdbc:mysql://localhost:3306/taskmanager
-spring.datasource.username=root
-spring.datasource.password=yourpassword
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-
-# JPA/Hibernate Configuration
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
-
-# Server Configuration
-server.port=8080
-
-# CORS Configuration
-cors.allowed.origins=http://localhost:4200
+server:
+  port: 8080
 ```
+
+**Note:** Replace `yourpassword` with your actual MySQL password.
 
 #### Build and Run
 
@@ -94,12 +100,6 @@ cors.allowed.origins=http://localhost:4200
 ```bash
 ./mvnw clean install
 ./mvnw spring-boot:run
-```
-
-**Using Gradle:**
-```bash
-./gradlew clean build
-./gradlew bootRun
 ```
 
 Backend will run on: **http://localhost:8080**
@@ -204,22 +204,14 @@ npm test           # Run unit tests
 npm run lint       # Run linting
 ```
 
-## Available Maven/Gradle Commands (Backend)
+## Available Maven Commands (Backend)
 
-**Maven:**
 ```bash
 ./mvnw clean           # Clean build artifacts
 ./mvnw compile         # Compile the project
 ./mvnw test            # Run tests
 ./mvnw package         # Create JAR file
-```
-
-**Gradle:**
-```bash
-./gradlew clean        # Clean build artifacts
-./gradlew build        # Build the project
-./gradlew test         # Run tests
-./gradlew bootJar      # Create JAR file
+./mvnw spring-boot:run # Run the application
 ```
 
 ## Troubleshooting
@@ -228,18 +220,29 @@ npm run lint       # Run linting
 
 **Database Connection Error:**
 - Verify MySQL is running
-- Check database credentials in `application.properties`
-- Ensure database `taskmanager` exists
+- Check database credentials in `application.yaml`
+- Ensure database `taskflowdb` exists
+- Verify password matches your MySQL root password
 
 **Port Already in Use:**
-- Change port in `application.properties`: `server.port=8081`
+- Change port in `application.yaml`:
+```yaml
+server:
+  port: 8081
+```
 
 ### Frontend Issues
 
 **Cannot connect to backend:**
 - Verify backend is running on port 8080
 - Check CORS configuration in backend
-- Verify `apiUrl` in `environment.ts`
+- Verify `apiUrl` in `src/environments/environment.ts`
+- Ensure both frontend and backend are running
+
+**Tailwind CSS not working:**
+- Make sure Tailwind is properly installed: `npm install -D tailwindcss postcss autoprefixer`
+- Verify `tailwind.config.js` exists and is properly configured
+- Check `styles.css` has the correct Tailwind directives
 
 **Port 4200 in use:**
 ```bash
@@ -269,11 +272,8 @@ npm test
 - File attachments
 - Advanced search functionality
 
-## License
-MIT License
-
 ## Author
-[Your Name]
+M H Ammar
 
 ---
 
