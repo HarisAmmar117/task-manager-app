@@ -1,9 +1,12 @@
 <!-- src/app/components/task-list/task-list.component.html -->
 
 <div class="task-list-container">
-  <!-- Header -->
+  <!-- Header with Add Button -->
   <div class="header">
     <h1>📋 Task Manager</h1>
+    <button class="btn btn-success" (click)="addTask()">
+      ➕ Add New Task
+    </button>
   </div>
 
   <!-- Error Message -->
@@ -39,6 +42,7 @@
   <!-- Empty State -->
   <div class="empty-state" *ngIf="!loading && filteredTasks.length === 0">
     <p>📭 No tasks found.</p>
+    <button class="btn btn-primary" (click)="addTask()">Create Your First Task</button>
   </div>
 
   <!-- Task Table -->

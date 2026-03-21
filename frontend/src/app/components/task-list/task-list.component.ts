@@ -3,6 +3,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Task } from '../../models/task.model';
 import { TaskService } from '../../services/task.service';
 
@@ -31,7 +32,8 @@ export class TaskListComponent implements OnInit {
 
   constructor(
     private taskService: TaskService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router  // ← Added Router
   ) {}
 
   ngOnInit(): void {
@@ -72,6 +74,11 @@ export class TaskListComponent implements OnInit {
         console.error('Error loading tasks:', error);
       }
     });
+  }
+
+  // ✅ NAVIGATE TO ADD TASK FORM
+  addTask(): void {
+    this.router.navigate(['/tasks/new']);
   }
 
   // ✅ FILTER TRIGGER

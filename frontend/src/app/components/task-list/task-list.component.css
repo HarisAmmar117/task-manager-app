@@ -7,7 +7,9 @@
 }
 
 .header {
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 30px;
 }
 
@@ -113,7 +115,7 @@
 .empty-state p {
   font-size: 1.3rem;
   color: #6c757d;
-  margin: 0;
+  margin-bottom: 20px;
 }
 
 /* Table Styles */
@@ -200,7 +202,7 @@
 
 /* Buttons */
 .btn {
-  padding: 8px 16px;
+  padding: 10px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -220,18 +222,15 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.btn-danger {
-  background-color: #dc3545;
+.btn-success {
+  background-color: #28a745;
   color: white;
 }
 
-.btn-danger:hover {
-  background-color: #c82333;
-}
-
-.btn-sm {
-  padding: 6px 12px;
-  font-size: 13px;
+.btn-success:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Action Buttons Section */
@@ -244,6 +243,12 @@
 @media (max-width: 768px) {
   .task-list-container {
     padding: 10px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
   }
 
   .header h1 {
