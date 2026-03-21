@@ -18,9 +18,21 @@ export class TaskService {
     return this.http.get<Task[]>(this.apiUrl);
   }
 
+  // Get task by ID - ID is string now
+  getTaskById(id: string): Observable<Task> {
+    return this.http.get<Task>(`${this.apiUrl}/${id}`);
+  }
+
   // Create new task - returns string from backend
   createTask(task: Task): Observable<string> {
     return this.http.post<string>(this.apiUrl, task, {
+      responseType: 'text' as 'json'
+    });
+  }
+
+  // Update existing task - returns string from backend, ID is string
+  updateTask(id: string, task: Task): Observable<string> {
+    return this.http.put<string>(`${this.apiUrl}/${id}`, task, {
       responseType: 'text' as 'json'
     });
   }

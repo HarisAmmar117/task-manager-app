@@ -3,8 +3,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { Task } from '../../models/task.model';
 import { TaskService } from '../../services/task.service';
 
@@ -38,43 +37,38 @@ export class TaskListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Load tasks first time
     this.loadTasks();
-
-    // ✅ Auto reload tasks whenever user navigates to this route
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.loadTasks();
-      });
   }
 
   // ✅ LOAD TASKS
   loadTasks(): void {
-    if (!this.isFirstLoad) this.loading = true;
+    if (!this.isFirstLoad) {
+      this.loading = true;
+    }
+
     this.errorMessage = '';
 
     this.taskService.getAllTasks().subscribe({
       next: (data) => {
         console.log('Tasks received from backend:', data);
-        this.tasks = data;
+        console.log('Tasks length:', data.length);
 
-        // Apply filter to show correct status
+        this.tasks = data;
         this.applyFilter();
 
         this.loading = false;
         this.isFirstLoad = false;
 
-        // Force Angular UI update
         this.cdr.detectChanges();
       },
       error: (error) => {
         this.errorMessage =
           'Failed to load tasks. Make sure your backend is running on http://localhost:8080';
-        console.error('Error loading tasks:', error);
 
         this.loading = false;
         this.isFirstLoad = false;
+
+        console.error('Error loading tasks:', error);
       }
     });
   }
@@ -82,6 +76,14 @@ export class TaskListComponent implements OnInit {
   // ✅ NAVIGATE TO ADD TASK FORM
   addTask(): void {
     this.router.navigate(['/tasks/new']);
+  }
+
+  // ✅ NAVIGATE TO EDIT TASK FORM - ID is string now
+  editTask(id: string | undefined): void {
+    if (id) {
+      console.log('Editing task with ID:', id);
+      this.router.navigate(['/tasks/edit', id]);
+    }
   }
 
   // ✅ FILTER TRIGGER

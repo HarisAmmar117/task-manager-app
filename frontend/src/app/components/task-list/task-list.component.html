@@ -55,6 +55,7 @@
           <th>Description</th>
           <th>Status</th>
           <th>Created At</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -68,6 +69,11 @@
             </span>
           </td>
           <td>{{ task.createdAt | date:'short' }}</td>
+          <td>
+            <button class="btn btn-warning btn-sm" (click)="editTask(task.id)">
+              ✏️ Edit
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>

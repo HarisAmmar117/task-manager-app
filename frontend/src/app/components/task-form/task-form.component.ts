@@ -1,9 +1,9 @@
 // src/app/components/task-form/task-form.component.ts
 
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Task } from '../../models/task.model';
 import { TaskService } from '../../services/task.service';
 
@@ -14,7 +14,7 @@ import { TaskService } from '../../services/task.service';
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.css']
 })
-export class TaskFormComponent {
+export class TaskFormComponent implements OnInit {
   task: Task = {
     title: '',
     description: '',
@@ -23,6 +23,8 @@ export class TaskFormComponent {
 
   loading: boolean = false;
   errorMessage: string = '';
+  isEditMode: boolean = false;
+  taskId?: string;
   
   // Validation errors
   titleError: string = '';
@@ -36,8 +38,53 @@ export class TaskFormComponent {
 
   constructor(
     private taskService: TaskService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef  // ← Added ChangeDetectorRef
   ) { }
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    
+    if (id) {
+      this.isEditMode = true;
+      this.taskId = id;
+      this.loadTask(this.taskId);
+    }
+  }
+
+  // Load existing task for editing
+  loadTask(id: string): void {
+    console.log('Loading task with ID:', id);
+    this.loading = true;
+    this.errorMessage = '';
+    
+    this.taskService.getTaskById(id).subscribe({
+      next: (task) => {
+        console.log('✅ Task loaded successfully:', task);
+        this.task = task;
+        this.loading = false;
+        
+        // ✅ FORCE ANGULAR TO UPDATE THE UI
+        this.cdr.detectChanges();
+        
+        console.log('UI updated with task data');
+      },
+      error: (error) => {
+        console.error('❌ Error loading task:', error);
+        this.errorMessage = 'Failed to load task. Please try again.';
+        this.loading = false;
+        
+        // Force UI update even on error
+        this.cdr.detectChanges();
+        
+        // Redirect back to list after 3 seconds if task not found
+        setTimeout(() => {
+          this.router.navigate(['/tasks']);
+        }, 3000);
+      }
+    });
+  }
 
   // Validate title
   validateTitle(): boolean {
@@ -99,6 +146,17 @@ export class TaskFormComponent {
     }
 
     this.loading = true;
+
+    if (this.isEditMode && this.taskId) {
+      // Update existing task
+      this.updateTask();
+    } else {
+      // Create new task
+      this.createTask();
+    }
+  }
+
+  createTask(): void {
     console.log('Creating task:', this.task);
 
     this.taskService.createTask(this.task).subscribe({
@@ -114,10 +172,32 @@ export class TaskFormComponent {
       },
       error: (error) => {
         console.error('❌ Error creating task:', error);
-        console.error('Error status:', error.status);
-        console.error('Error message:', error.message);
         this.errorMessage = 'Failed to create task. Please try again.';
         this.loading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  updateTask(): void {
+    console.log('Updating task:', this.taskId, this.task);
+
+    this.taskService.updateTask(this.taskId!, this.task).subscribe({
+      next: (response) => {
+        console.log('✅ Task updated successfully. Backend response:', response);
+        this.loading = false;
+        
+        // Navigate back to task list
+        this.router.navigate(['/tasks']).then(() => {
+          console.log('Navigation completed - page will reload');
+          window.location.reload();
+        });
+      },
+      error: (error) => {
+        console.error('❌ Error updating task:', error);
+        this.errorMessage = 'Failed to update task. Please try again.';
+        this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }

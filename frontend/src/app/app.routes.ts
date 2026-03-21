@@ -6,7 +6,8 @@ import { TaskFormComponent } from './components/task-form/task-form.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/tasks', pathMatch: 'full' },
-  { path: 'tasks/new', component: TaskFormComponent },
-  { path: 'tasks', component: TaskListComponent },
+  { path: 'tasks/new', component: TaskFormComponent },       // Create new task
+  { path: 'tasks/edit/:id', component: TaskFormComponent },  // Edit existing task
+  { path: 'tasks', component: TaskListComponent },           // List all tasks
   { path: '**', redirectTo: '/tasks' }
 ];

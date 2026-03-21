@@ -2,7 +2,7 @@
 
 <div class="form-container">
   <div class="form-header">
-    <h1>➕ Create New Task</h1>
+    <h1>{{ isEditMode ? '✏️ Edit Task' : '➕ Create New Task' }}</h1>
   </div>
 
   <!-- Error Message -->
@@ -10,8 +10,14 @@
     ⚠️ {{ errorMessage }}
   </div>
 
-  <!-- Task Form -->
-  <form (ngSubmit)="onSubmit()" #taskForm="ngForm">
+  <!-- Loading State ONLY when loading and task not loaded yet -->
+  <div class="loading" *ngIf="loading && !task.id">
+    <div class="spinner"></div>
+    <p>Loading task...</p>
+  </div>
+
+  <!-- Task Form - Show when NOT loading OR when task is already loaded -->
+  <form (ngSubmit)="onSubmit()" #taskForm="ngForm" *ngIf="!loading || task.id">
     
     <!-- Title Field -->
     <div class="form-group">
@@ -79,8 +85,8 @@
         Cancel
       </button>
       <button type="submit" class="btn btn-primary" [disabled]="loading">
-        <span *ngIf="!loading">Create Task</span>
-        <span *ngIf="loading">Creating...</span>
+        <span *ngIf="!loading">{{ isEditMode ? 'Update Task' : 'Create Task' }}</span>
+        <span *ngIf="loading">{{ isEditMode ? 'Updating...' : 'Creating...' }}</span>
       </button>
     </div>
   </form>
