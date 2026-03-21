@@ -266,11 +266,6 @@ npm test
 ## Future Enhancements
 - JWT-based authentication
 - Docker containerization
-- Task categories and tags
-- Task assignment to users
-- Due dates and reminders
-- File attachments
-- Advanced search functionality
 
 ## Author
 M H Ammar
