@@ -33,7 +33,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/taskflowdb
     username: root
-    password: YOUR_MYSQL_PASSWORD  # Change this
+    password: YOUR_MYSQL_PASSWORD
 ```
 
 ---
