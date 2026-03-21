@@ -26,6 +26,12 @@
   margin-bottom: 20px;
 }
 
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
 .alert-danger {
   background-color: #f8d7da;
   color: #721c24;
@@ -200,6 +206,13 @@
   color: #0f5132;
 }
 
+/* Action Buttons in Table */
+.action-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 /* Buttons */
 .btn {
   padding: 10px 20px;
@@ -240,6 +253,17 @@
 
 .btn-warning:hover {
   background-color: #e0a800;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -289,5 +313,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .action-btns {
+    flex-direction: column;
+  }
+
+  .btn-sm {
+    width: 100%;
   }
 }

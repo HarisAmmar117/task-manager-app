@@ -21,6 +21,7 @@ export class TaskListComponent implements OnInit {
   selectedStatus: string = 'ALL';
   loading: boolean = false;
   errorMessage: string = '';
+  successMessage: string = '';
   isFirstLoad: boolean = true;
 
   statusOptions = [
@@ -47,6 +48,7 @@ export class TaskListComponent implements OnInit {
     }
 
     this.errorMessage = '';
+    this.successMessage = '';
 
     this.taskService.getAllTasks().subscribe({
       next: (data) => {
@@ -69,6 +71,7 @@ export class TaskListComponent implements OnInit {
         this.isFirstLoad = false;
 
         console.error('Error loading tasks:', error);
+        this.cdr.detectChanges();
       }
     });
   }
@@ -78,12 +81,53 @@ export class TaskListComponent implements OnInit {
     this.router.navigate(['/tasks/new']);
   }
 
-  // ✅ NAVIGATE TO EDIT TASK FORM - ID is string now
+  // ✅ NAVIGATE TO EDIT TASK FORM
   editTask(id: string | undefined): void {
     if (id) {
       console.log('Editing task with ID:', id);
       this.router.navigate(['/tasks/edit', id]);
     }
+  }
+
+  // ✅ DELETE TASK
+  deleteTask(id: string | undefined): void {
+    if (!id) return;
+
+    // Show confirmation dialog
+    const confirmed = confirm('Are you sure you want to delete this task?');
+    
+    if (!confirmed) {
+      return;
+    }
+
+    console.log('Deleting task with ID:', id);
+
+    this.taskService.deleteTask(id).subscribe({
+      next: (response) => {
+        console.log('✅ Task deleted successfully. Backend response:', response);
+        
+        this.successMessage = 'Task deleted successfully!';
+        
+        // Reload tasks after deletion
+        this.loadTasks();
+        
+        // Clear success message after 3 seconds
+        setTimeout(() => {
+          this.successMessage = '';
+          this.cdr.detectChanges();
+        }, 3000);
+      },
+      error: (error) => {
+        console.error('❌ Error deleting task:', error);
+        this.errorMessage = 'Failed to delete task. Please try again.';
+        
+        // Clear error message after 3 seconds
+        setTimeout(() => {
+          this.errorMessage = '';
+          this.cdr.detectChanges();
+        }, 3000);
+      }
+    });
   }
 
   // ✅ FILTER TRIGGER

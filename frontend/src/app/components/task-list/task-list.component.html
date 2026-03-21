@@ -9,6 +9,11 @@
     </button>
   </div>
 
+  <!-- Success Message -->
+  <div class="alert alert-success" *ngIf="successMessage">
+    ✅ {{ successMessage }}
+  </div>
+
   <!-- Error Message -->
   <div class="alert alert-danger" *ngIf="errorMessage">
     ⚠️ {{ errorMessage }}
@@ -70,9 +75,14 @@
           </td>
           <td>{{ task.createdAt | date:'short' }}</td>
           <td>
-            <button class="btn btn-warning btn-sm" (click)="editTask(task.id)">
-              ✏️ Edit
-            </button>
+            <div class="action-btns">
+              <button class="btn btn-warning btn-sm" (click)="editTask(task.id)">
+                ✏️ Edit
+              </button>
+              <button class="btn btn-danger btn-sm" (click)="deleteTask(task.id)">
+                🗑️ Delete
+              </button>
+            </div>
           </td>
         </tr>
       </tbody>
