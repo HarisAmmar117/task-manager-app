@@ -6,7 +6,7 @@ import { TaskFormComponent } from './components/task-form/task-form.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/tasks', pathMatch: 'full' },
-  { path: 'tasks/new', component: TaskFormComponent },    
-  { path: 'tasks', component: TaskListComponent },        
+  { path: 'tasks/new', component: TaskFormComponent },
+  { path: 'tasks', component: TaskListComponent },
   { path: '**', redirectTo: '/tasks' }
 ];

@@ -3,7 +3,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { Task } from '../../models/task.model';
 import { TaskService } from '../../services/task.service';
 
@@ -33,45 +34,47 @@ export class TaskListComponent implements OnInit {
   constructor(
     private taskService: TaskService,
     private cdr: ChangeDetectorRef,
-    private router: Router  // ← Added Router
+    private router: Router
   ) {}
 
   ngOnInit(): void {
+    // Load tasks first time
     this.loadTasks();
+
+    // ✅ Auto reload tasks whenever user navigates to this route
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.loadTasks();
+      });
   }
 
-  // ✅ LOAD TASKS (FIXED)
+  // ✅ LOAD TASKS
   loadTasks(): void {
-    if (!this.isFirstLoad) {
-      this.loading = true;
-    }
-
+    if (!this.isFirstLoad) this.loading = true;
     this.errorMessage = '';
 
     this.taskService.getAllTasks().subscribe({
       next: (data) => {
         console.log('Tasks received from backend:', data);
-        console.log('Tasks length:', data.length);
-
         this.tasks = data;
 
-        // ✅ Always apply filter
+        // Apply filter to show correct status
         this.applyFilter();
 
         this.loading = false;
         this.isFirstLoad = false;
 
-        // ✅ FORCE UI UPDATE (MAIN FIX)
+        // Force Angular UI update
         this.cdr.detectChanges();
       },
       error: (error) => {
         this.errorMessage =
           'Failed to load tasks. Make sure your backend is running on http://localhost:8080';
+        console.error('Error loading tasks:', error);
 
         this.loading = false;
         this.isFirstLoad = false;
-
-        console.error('Error loading tasks:', error);
       }
     });
   }

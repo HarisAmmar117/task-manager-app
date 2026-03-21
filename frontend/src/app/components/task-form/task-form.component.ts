@@ -103,19 +103,19 @@ export class TaskFormComponent {
 
     this.taskService.createTask(this.task).subscribe({
       next: (response) => {
-        console.log('✅ Task created successfully:', response);
+        console.log('✅ Task created successfully. Backend response:', response);
         this.loading = false;
         
-        // Navigate and force reload
+        // Navigate back to task list
         this.router.navigate(['/tasks']).then(() => {
-          console.log('Navigation completed');
-          // Force page reload to refresh data
+          console.log('Navigation completed - page will reload');
           window.location.reload();
         });
       },
       error: (error) => {
         console.error('❌ Error creating task:', error);
-        console.error('Error details:', error.status, error.message);
+        console.error('Error status:', error.status);
+        console.error('Error message:', error.message);
         this.errorMessage = 'Failed to create task. Please try again.';
         this.loading = false;
       }
