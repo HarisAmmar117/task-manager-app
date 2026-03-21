@@ -1,6 +1,6 @@
 // src/app/components/task-list/task-list.component.ts
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Task } from '../../models/task.model';
@@ -9,18 +9,19 @@ import { TaskService } from '../../services/task.service';
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],  // ← This is CRITICAL!
+  imports: [CommonModule, FormsModule],
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent implements OnInit {
+
   tasks: Task[] = [];
   filteredTasks: Task[] = [];
   selectedStatus: string = 'ALL';
   loading: boolean = false;
   errorMessage: string = '';
-  
-  // Status options for filtering
+  isFirstLoad: boolean = true;
+
   statusOptions = [
     { value: 'ALL', label: 'All Tasks' },
     { value: 'TO_DO', label: 'To Do' },
@@ -28,42 +29,71 @@ export class TaskListComponent implements OnInit {
     { value: 'DONE', label: 'Done' }
   ];
 
-  constructor(private taskService: TaskService) { }
+  constructor(
+    private taskService: TaskService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadTasks();
   }
 
-  // Load all tasks from backend
+  // ✅ LOAD TASKS (FIXED)
   loadTasks(): void {
-    this.loading = true;
+    if (!this.isFirstLoad) {
+      this.loading = true;
+    }
+
     this.errorMessage = '';
-    
+
     this.taskService.getAllTasks().subscribe({
       next: (data) => {
+        console.log('Tasks received from backend:', data);
+        console.log('Tasks length:', data.length);
+
         this.tasks = data;
-        this.filteredTasks = data;
+
+        // ✅ Always apply filter
+        this.applyFilter();
+
         this.loading = false;
-        console.log('Tasks loaded:', data);
+        this.isFirstLoad = false;
+
+        // ✅ FORCE UI UPDATE (MAIN FIX)
+        this.cdr.detectChanges();
       },
       error: (error) => {
-        this.errorMessage = 'Failed to load tasks. Make sure your backend is running on http://localhost:8080';
+        this.errorMessage =
+          'Failed to load tasks. Make sure your backend is running on http://localhost:8080';
+
         this.loading = false;
+        this.isFirstLoad = false;
+
         console.error('Error loading tasks:', error);
       }
     });
   }
 
-  // Filter tasks by status
+  // ✅ FILTER TRIGGER
   filterTasks(): void {
+    this.applyFilter();
+  }
+
+  // ✅ FILTER LOGIC
+  private applyFilter(): void {
     if (this.selectedStatus === 'ALL') {
       this.filteredTasks = [...this.tasks];
     } else {
-      this.filteredTasks = this.tasks.filter(task => task.status === this.selectedStatus);
+      this.filteredTasks = this.tasks.filter(
+        (task) => task.status === this.selectedStatus
+      );
     }
+
+    console.log('Filtered tasks:', this.filteredTasks);
+    console.log('Selected status:', this.selectedStatus);
   }
 
-  // Get CSS class based on status
+  // ✅ STATUS CSS
   getStatusClass(status: string): string {
     switch (status) {
       case 'TO_DO':
