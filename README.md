@@ -9,6 +9,7 @@ A full-stack Task Manager application built with Angular (frontend), Spring Boot
 - ✅ Responsive UI with Angular Material/Bootstrap
 - ✅ Form validation
 - ✅ RESTful API architecture
+- ✅ 3 - Tier Monolati architecture
 
 ## Tech Stack
 
@@ -23,16 +24,16 @@ A full-stack Task Manager application built with Angular (frontend), Spring Boot
 ### Backend
 - Spring Boot
 - Spring Data JPA
-- Maven/Gradle
+- Maven
 - RESTful API
 
 ### Database
 - MySQL
 
 ## Prerequisites
-- Node.js 16+ and npm
-- Java 17+ (or Java 11+)
-- Maven or Gradle
+- Node.js v24.14.0
+- Java 21
+- Maven
 - MySQL Server
 
 ## Setup Instructions
@@ -50,7 +51,7 @@ Download and install MySQL from [https://dev.mysql.com/downloads/](https://dev.m
 
 #### Create Database
 ```sql
-CREATE DATABASE taskmanager;
+CREATE DATABASE taskflowdb;
 ```
 
 #### Database Configuration
@@ -64,7 +65,7 @@ cd backend
 ```
 
 #### Update Database Credentials
-Edit `src/main/resources/application.properties`:
+Edit `src/main/resources/application.yaml`:
 
 ```properties
 spring.application.name=taskmanager
@@ -166,51 +167,6 @@ Open your browser and navigate to: **http://localhost:4200**
   "description": "Finish the full stack coding assignment",
   "status": "IN_PROGRESS"
 }
-```
-
-## Project Structure
-
-```
-task-manager-app/
-├── backend/
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/
-│   │   │   │   └── com/taskmanager/
-│   │   │   │       ├── controller/
-│   │   │   │       │   └── TaskController.java
-│   │   │   │       ├── service/
-│   │   │   │       │   ├── TaskService.java
-│   │   │   │       │   └── TaskServiceImpl.java
-│   │   │   │       ├── repository/
-│   │   │   │       │   └── TaskRepository.java
-│   │   │   │       ├── model/
-│   │   │   │       │   └── Task.java
-│   │   │   │       └── dto/
-│   │   │   │           └── TaskDTO.java
-│   │   │   └── resources/
-│   │   │       └── application.properties
-│   │   └── test/
-│   ├── pom.xml (or build.gradle)
-│   └── README.md
-│
-├── frontend/
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── components/
-│   │   │   │   ├── task-list/
-│   │   │   │   ├── task-form/
-│   │   │   │   └── task-detail/
-│   │   │   ├── services/
-│   │   │   │   └── task.service.ts
-│   │   │   ├── models/
-│   │   │   │   └── task.model.ts
-│   │   │   └── app-routing.module.ts
-│   │   └── environments/
-│   ├── package.json
-│   └── README.md
-│
-└── README.md
 ```
 
 ## Task Entity Model

@@ -1,8 +1,11 @@
-package com.taskflow.backend;
+package com.taskflow.backend.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.taskflow.backend.dtos.TaskRequest;
+import com.taskflow.backend.dtos.TaskResponse;
+import com.taskflow.backend.services.TaskService;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

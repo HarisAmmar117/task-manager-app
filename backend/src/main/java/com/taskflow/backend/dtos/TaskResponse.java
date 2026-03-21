@@ -1,4 +1,4 @@
-package com.taskflow.backend;
+package com.taskflow.backend.dtos;
 
 import java.time.LocalDateTime;
 

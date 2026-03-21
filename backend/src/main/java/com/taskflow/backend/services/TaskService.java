@@ -1,10 +1,15 @@
-package com.taskflow.backend;
+package com.taskflow.backend.services;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+
+import com.taskflow.backend.dtos.TaskRequest;
+import com.taskflow.backend.dtos.TaskResponse;
+import com.taskflow.backend.models.Task;
+import com.taskflow.backend.repositories.TaskRepository;
 
 import lombok.RequiredArgsConstructor;
 
