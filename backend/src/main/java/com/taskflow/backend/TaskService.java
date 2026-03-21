@@ -108,6 +108,15 @@ public class TaskService {
         }
     }
 
+    //deleting by id
+    public boolean deleteTask(Long id) {
+        if (taskRepository.existsById(id)) {
+            taskRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
 
     //converting task request to task
     public void updateTaskFromRequest(Task task, TaskRequest request){
@@ -133,6 +142,10 @@ public class TaskService {
         return taskResponse;
 
     }
+
+
+
+
 
 
 
