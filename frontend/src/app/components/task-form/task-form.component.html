@@ -1,0 +1,93 @@
+<!-- src/app/components/task-form/task-form.component.html -->
+
+<div class="form-container">
+  <div class="form-header">
+    <h1>{{ isEditMode ? '✏️ Edit Task' : '➕ Create New Task' }}</h1>
+  </div>
+
+  <!-- Error Message -->
+  <div class="alert alert-danger" *ngIf="errorMessage">
+    ⚠️ {{ errorMessage }}
+  </div>
+
+  <!-- Loading State ONLY when loading and task not loaded yet -->
+  <div class="loading" *ngIf="loading && !task.id">
+    <div class="spinner"></div>
+    <p>Loading task...</p>
+  </div>
+
+  <!-- Task Form - Show when NOT loading OR when task is already loaded -->
+  <form (ngSubmit)="onSubmit()" #taskForm="ngForm" *ngIf="!loading || task.id">
+    
+    <!-- Title Field -->
+    <div class="form-group">
+      <label for="title">
+        Title <span class="required">*</span>
+      </label>
+      <input
+        type="text"
+        id="title"
+        class="form-control"
+        [(ngModel)]="task.title"
+        name="title"
+        placeholder="Enter task title (3-100 characters)"
+        (blur)="validateTitle()"
+        [class.is-invalid]="titleError"
+        required
+      />
+      <div class="char-count">{{ getTitleCharCount() }}/100 characters</div>
+      <div class="error-message" *ngIf="titleError">
+        {{ titleError }}
+      </div>
+    </div>
+
+    <!-- Description Field -->
+    <div class="form-group">
+      <label for="description">
+        Description <span class="required">*</span>
+      </label>
+      <textarea
+        id="description"
+        class="form-control"
+        [(ngModel)]="task.description"
+        name="description"
+        rows="4"
+        placeholder="Enter task description (max 500 characters)"
+        (blur)="validateDescription()"
+        [class.is-invalid]="descriptionError"
+        required
+      ></textarea>
+      <div class="char-count">{{ getDescriptionCharCount() }}/500 characters</div>
+      <div class="error-message" *ngIf="descriptionError">
+        {{ descriptionError }}
+      </div>
+    </div>
+
+    <!-- Status Field -->
+    <div class="form-group">
+      <label for="status">Status <span class="required">*</span></label>
+      <select
+        id="status"
+        class="form-control"
+        [(ngModel)]="task.status"
+        name="status"
+        required
+      >
+        <option *ngFor="let statusOption of statusOptions" [value]="statusOption.value">
+          {{ statusOption.label }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="cancel()" [disabled]="loading">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        <span *ngIf="!loading">{{ isEditMode ? 'Update Task' : 'Create Task' }}</span>
+        <span *ngIf="loading">{{ isEditMode ? 'Updating...' : 'Creating...' }}</span>
+      </button>
+    </div>
+  </form>
+</div>
