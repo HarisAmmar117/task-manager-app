@@ -3,11 +3,9 @@ package com.taskflow.backend.dtos;
 import lombok.Data;
 
 @Data
-public class RegisterRequest {
-
+public class LoginRequest {
 
     private String username;
     private String password;
-    private String email;
-    private String fullName;
+    
 }
