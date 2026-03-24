@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -17,31 +16,36 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router
-  ) { }
+  ) {}
 
-  // Register new user
-  register(registerData: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, registerData)
-      .pipe(
-        tap(response => {
-          console.log('✅ Register response:', response);
-          this.handleAuthSuccess(response);
-        })
-      );
+  // ✅ Register + Auto Login
+  register(registerData: RegisterRequest): Observable<string> {
+    return this.http.post(`${this.apiUrl}/register`, registerData, {
+      responseType: 'text'
+    }).pipe(
+      tap(res => {
+        console.log('✅ Register response:', res);
+
+        // ❌ no auto-login possible (no token)
+        this.router.navigate(['/login']);
+      })
+    );
   }
 
-  // Login user
+  // ✅ Login
   login(loginData: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, loginData)
       .pipe(
         tap(response => {
           console.log('✅ Login response:', response);
           this.handleAuthSuccess(response);
+
+          this.router.navigate(['/tasks']);
         })
       );
   }
 
-  // Logout user
+  // Logout
   logout(): void {
     localStorage.removeItem('authToken');
     localStorage.removeItem('username');
@@ -52,57 +56,44 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  // Check if user is logged in
   isLoggedIn(): boolean {
-    const token = this.getToken();
-    return !!token;
+    return !!this.getToken();
   }
 
-  // Get stored token
   getToken(): string | null {
     return localStorage.getItem('authToken');
   }
 
-  // Get stored username
   getStoredUsername(): string | null {
     return localStorage.getItem('username');
   }
 
-  // Get current user
   getCurrentUser(): string | null {
     return this.currentUserSubject.value;
   }
 
-  // Get user ID
   getUserId(): number | null {
     const id = localStorage.getItem('userId');
     return id ? +id : null;
   }
 
-  // Get user email
   getUserEmail(): string | null {
     return localStorage.getItem('userEmail');
   }
 
-  // Get user role
   getUserRole(): string | null {
     return localStorage.getItem('userRole');
   }
 
-  // Handle successful authentication
   private handleAuthSuccess(response: AuthResponse): void {
-    // Store token
     localStorage.setItem('authToken', response.token);
-    
-    // Store user info
     localStorage.setItem('username', response.username);
     localStorage.setItem('userId', response.id.toString());
     localStorage.setItem('userEmail', response.email);
     localStorage.setItem('userRole', response.role);
-    
-    // Update subject
+
     this.currentUserSubject.next(response.username);
-    
-    console.log('User data stored in localStorage');
+
+    console.log('✅ User stored & logged in');
   }
 }
