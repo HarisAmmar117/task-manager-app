@@ -7,7 +7,7 @@ Full-stack Task Manager application with Angular, Spring Boot, MySQL, JWT authen
 - **Backend:** Spring Boot (Java 21) with Maven
 - **Database:** MySQL 8.0+
 - **Authentication:** JWT
-- **Database:** Docker & Docker Compose
+- **Containerization:** Docker & Docker Compose
 
 
 ## Prerequisites
