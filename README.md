@@ -1,17 +1,21 @@
 # Task Manager App
 
-Full-stack Task Manager application with Angular, Spring Boot, and MySQL.
+Full-stack Task Manager application with Angular, Spring Boot, MySQL, JWT authentication, and Docker support.
 
 ## Tech Stack
 - **Frontend:** Angular with Tailwind CSS
 - **Backend:** Spring Boot (Java 21) with Maven
 - **Database:** MySQL 8.0+
+- **Authentication:** JWT
+- **Database:** Docker & Docker Compose
+
 
 ## Prerequisites
 - Node.js v20.14.0+
 - Java 21
 - Maven
 - MySQL 8.0+
+- Docker & Docker Compose
 
 ---
 
@@ -66,7 +70,12 @@ cd frontend
 npm install
 ```
 
-### 3. Run the application
+### 2. Build Angular app for production
+```bash
+ng build -c production
+```
+
+### 4. Run the application
 ```bash
 ng serve
 ```
@@ -81,6 +90,22 @@ Open your browser: **http://localhost:4200**
 
 ---
 
+
+
+## Running with Docker
+
+### 1. Build and start containers
+```bash
+docker-compose up --build
+```
+
+### 2. Stopping containers
+```bash
+docker-compose down
+```
+
+---
+
 ## API Endpoints
 
 | Method | Endpoint | Description |
@@ -90,6 +115,8 @@ Open your browser: **http://localhost:4200**
 | POST | `/api/tasks` | Create new task |
 | PUT | `/api/tasks/{id}` | Update task |
 | DELETE | `/api/tasks/{id}` | Delete task |
+| POST | `/api/auth/login` | User login (JWT) |
+| POST | `/api/auth/register` | Register new user |
 
 ---
 
@@ -119,15 +146,14 @@ Open your browser: **http://localhost:4200**
 - Run `npm install` first
 - Check if port 4200 is available
 
+**Frontend not loading routes:**
+- Ensure Angular build ran successfully (ng build -c production)
+- Use Docker SPA fix (serve -s dist/frontend) if using container
+
 **Cannot connect to backend:**
 - Make sure backend is running on port 8080
 - Check console for errors
-
----
-
-**Features to be added**
-- JWT Authentication
-- Dockerization
+- Check Docker network or CORS configuration
 
 ---
 
