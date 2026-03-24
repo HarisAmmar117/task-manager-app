@@ -1,17 +1,23 @@
-
-FROM node:20 AS build
+FROM node:20-alpine AS builder
 
 WORKDIR /app
+
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 COPY . .
-RUN npm run build --prod
+RUN npx ng build --configuration production
 
+FROM node:20-alpine
 
-FROM nginx:alpine
+RUN npm install -g http-server
 
-COPY --from=build /app/dist/ /usr/share/nginx/html
+# Copy the browser directory
+COPY --from=builder /app/dist/frontend/browser /app/dist
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+WORKDIR /app/dist
+
+EXPOSE 4200
+
+# Use -P flag to push state for SPA routing
+CMD ["http-server", "-p", "4200", "-c-1", "-P", "http://localhost:4200?"]
