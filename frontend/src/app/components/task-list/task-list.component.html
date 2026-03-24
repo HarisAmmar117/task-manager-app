@@ -3,12 +3,19 @@
 <div class="task-list-container">
   <!-- Header with Add Button -->
   <div class="header">
-    <h1>📋 TaskFlow</h1>
-    <button class="btn btn-success" (click)="addTask()">
-      ➕ Add New Task
-    </button>
+    <div class="header-left">
+      <h1>📋 Task Manager</h1>
+      <span class="welcome-text">Welcome, {{ currentUsername }}!</span>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-success" (click)="addTask()">
+        ➕ Add New Task
+      </button>
+      <button class="btn btn-secondary" (click)="logout()">
+        🚪 Logout
+      </button>
+    </div>
   </div>
-
   <!-- Success Message -->
   <div class="alert alert-success" *ngIf="successMessage">
     ✅ {{ successMessage }}

@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Task } from '../../models/task.model';
 import { TaskService } from '../../services/task.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-task-list',
@@ -34,11 +35,20 @@ export class TaskListComponent implements OnInit {
   constructor(
     private taskService: TaskService,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.loadTasks();
+  }
+
+  logout(): void {
+  this.authService.logout();
+  }
+
+  get currentUsername(): string | null {
+  return this.authService.getStoredUsername();
   }
 
   // ✅ LOAD TASKS
