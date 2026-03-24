@@ -12,7 +12,6 @@ import { TaskService } from '../../services/task.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './task-form.component.html',
-  styleUrls: ['./task-form.component.css']
 })
 export class TaskFormComponent implements OnInit {
   task: Task = {

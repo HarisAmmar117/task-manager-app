@@ -11,7 +11,6 @@ import { RegisterRequest } from '../../../models/auth.model';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
   registerData: RegisterRequest = {
@@ -29,6 +28,19 @@ export class RegisterComponent {
     private authService: AuthService,
     private router: Router
   ) { }
+
+  // Add this method to your register.component.ts
+  isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  togglePasswordVisibility(inputId: string): void {
+    const input = document.getElementById(inputId) as HTMLInputElement;
+    if (input) {
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+  }
 
   onSubmit(): void {
     // Validate
