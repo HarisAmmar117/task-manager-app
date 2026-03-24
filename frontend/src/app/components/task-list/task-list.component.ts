@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './task-list.component.html',
+  styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent implements OnInit {
 

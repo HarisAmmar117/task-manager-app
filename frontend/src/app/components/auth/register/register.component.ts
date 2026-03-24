@@ -11,6 +11,7 @@ import { RegisterRequest } from '../../../models/auth.model';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
   registerData: RegisterRequest = {
