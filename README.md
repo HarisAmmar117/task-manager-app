@@ -122,6 +122,11 @@ docker-compose down
 
 ## Screenshots
 
+### Login
+![Login](screenshots/login.png)
+
+### Register
+![Register](screenshots/register.png)
 
 ### Task List
 ![Task List](screenshots/task-list.png)
